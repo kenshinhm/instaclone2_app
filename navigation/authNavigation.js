@@ -8,9 +8,9 @@ const AuthNavigation = createAppContainer(
     createStackNavigator(
         {
             AuthHome,
+            SignUp,
             Login,
             Confirm,
-            SignUp,
         },
         {
             headerMode: "none",
