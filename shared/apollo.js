@@ -1,5 +1,6 @@
 const apolloOptions = {
-    uri: "http://localhost:4000"
+    //Real IP of localhost
+    uri: "http://218.148.38.209:4000/"
 };
 
 export default apolloOptions;

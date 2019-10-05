@@ -35,10 +35,10 @@ const Login = ({navigation}) => {
             const {data: {requestSecret}} = await requestSecretMutation();
             if (requestSecret) {
                 Alert.alert("Check your email");
-                navigation.navigate("Confirm");
+                navigation.navigate("Confirm", {email: value});
             } else {
                 Alert.alert("Email is not found");
-                navigation.navigate("SignUp");
+                navigation.navigate("SignUp", {email: value});
             }
         } catch (e) {
             Alert.alert(e.toString());
