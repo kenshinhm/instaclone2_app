@@ -6,11 +6,11 @@ import * as Font from 'expo-font';
 import {AsyncStorage, Text, TouchableOpacity, View} from "react-native";
 import {InMemoryCache} from "apollo-cache-inmemory";
 import {persistCache} from "apollo-cache-persist";
-import apolloOptions from "./apollo.js";
+import apolloOptions from "./shared/apollo.js";
 import ApolloClient from "apollo-boost";
 import {ApolloProvider} from "react-apollo-hooks";
 import {ThemeProvider} from "styled-components";
-import styles from "./styles";
+import styles from "./shared/styles.js";
 import {AuthProvider} from "./context/authContext.js";
 import NavController from "./components/navController.js";
 

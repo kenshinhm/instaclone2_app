@@ -1,11 +1,11 @@
 import React from "react";
 import {View} from "react-native";
+import {useIsLoggedIn} from "../context/authContext.js";
 import AuthNavigation from "../navigation/authNavigation.js";
 import MainNavigation from "../navigation/mainNavigation.js";
 
 const NavController = () => {
-    const isLoggedIn = true;
-    // const isLoggedIn = useIsLoggedIn();
+    const isLoggedIn = useIsLoggedIn();
     // const logIn = useLogIn();
     // const logOut = useLogOut();
     return (
