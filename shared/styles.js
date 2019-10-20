@@ -1,4 +1,4 @@
-export default {
+const Styles = {
     blackColor: "#262626",
     greyColor: "#FAFAFA",
     darkGreyColor: "#999",
@@ -7,3 +7,5 @@ export default {
     blueColor: "#3897f0",
     darkBlueColor: "#003569"
 };
+
+export default Styles;
