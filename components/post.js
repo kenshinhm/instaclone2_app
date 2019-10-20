@@ -1,12 +1,23 @@
-import React from "react";
+import React, {useState} from "react";
 import {Image, Platform} from "react-native";
 import styled from "styled-components";
 import * as  PropTypes from "prop-types";
 import {Ionicons} from "@expo/vector-icons";
 import Swiper from "react-native-swiper";
 import Constant from "../shared/constants.js";
+import {gql} from "apollo-boost";
+import {useMutation} from "react-apollo-hooks";
+import Styles from "../shared/styles.js";
 
-const Container = styled.View``;
+export const TOGGLE_LIKE = gql`
+    mutation toggelLike($postId: String!) {
+        toggleLike(postId: $postId)
+    }
+`;
+
+const Container = styled.View`
+    margin-bottom: 40px;
+`;
 
 const Header = styled.View`
     padding: 15px;
@@ -44,7 +55,7 @@ const InfoContainer = styled.View`
     padding: 10px;
 `;
 const Caption = styled.Text`
-    margin: 3px 0;
+    margin: 5px 0;
 `;
 const CommentCount = styled.Text`
     opacity: 0.5;
@@ -52,13 +63,35 @@ const CommentCount = styled.Text`
 `;
 
 const Post = ({
+    id,
     user,
     location,
     files = [],
-    likeCount,
+    likeCount: likeCountProp,
     caption,
-    comments = []
+    comments = [],
+    isLiked: isLikedProp
 }) => {
+    const [isLiked, setIsLiked] = useState(isLikedProp);
+    const [likeCount, setLikeCount] = useState(likeCountProp);
+    const toggleLikeMutation = useMutation(TOGGLE_LIKE, {
+        variables: {
+            postId: id
+        }
+    });
+    const handleLike = async () => {
+        if (isLiked === true) {
+            setLikeCount(l => l - 1);
+        } else {
+            setLikeCount(l => l + 1);
+        }
+        setIsLiked(p => !p);
+        try {
+            await toggleLikeMutation();
+        } catch (e) {
+        }
+    };
+
     return (
         <Container>
             <Header>
@@ -75,8 +108,12 @@ const Post = ({
                 </Touchable>
             </Header>
             <Swiper
-                showsPagination={false}
+                showsPagination={true}
                 style={{height: Constant.height / 2.5}}
+                paginationStyle={{position: "absolute", bottom: -25}}
+                dotStyle={{width: 4, height: 4}}
+                activeDotStyle={{width: 4, height: 4}}
+                activeDotColor={'black'}
             >
                 {files.map(file => (
                     <Image style={{width: Constant.width, height: Constant.height / 2.5}}
@@ -87,12 +124,19 @@ const Post = ({
             </Swiper>
             <InfoContainer>
                 <IconsContainer>
-                    <Touchable>
+                    <Touchable onPress={handleLike}>
                         <IconContainer>
                             <Ionicons
-                                size={28}
+                                size={24}
+                                color={isLiked ? Styles.redColor : Styles.blackColor}
                                 name={
-                                    Platform.OS === "ios" ? "ios-heart-empty" : "md-heart-empty"
+                                    Platform.OS === "ios"
+                                        ? isLiked
+                                        ? "ios-heart"
+                                        : "ios-heart-empty"
+                                        : isLiked
+                                        ? "md-heart"
+                                        : "md-heart-empty"
                                 }
                             />
                         </IconContainer>
@@ -100,7 +144,8 @@ const Post = ({
                     <Touchable>
                         <IconContainer>
                             <Ionicons
-                                size={26}
+                                size={24}
+                                color={Styles.blackColor}
                                 name={Platform.OS === "ios" ? "ios-text" : "md-mail"}
                             />
                         </IconContainer>

@@ -59,8 +59,11 @@ const TabNavigation = createBottomTabNavigator(
                 tabBarIcon: ({focused}) => (
                     <NavIcon
                         focused={focused}
-                        size={26}
-                        name={Platform.OS === "ios" ? "ios-add" : "md-add"}/>
+                        size={30}
+                        name={Platform.OS === "ios" ?
+                            "ios-add-circle-outline"
+                            :
+                            "md-add-circle-outline"}/>
                 ),
             }
         },
