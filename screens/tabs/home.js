@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Loader from "../../components/loader.js";
 import {useQuery} from "react-apollo-hooks";
 import {gql} from "apollo-boost";
+import Post from "../../components/post.js";
 
 const View = styled.View`
     justify-content: center;
@@ -41,8 +42,6 @@ const FEED_QUERY = gql`
     }
 `;
 
-const Text = styled.Text``;
-
 const Home = () => {
     const [refreshing, setRefreshing] = useState(false);
     const {loading, data, refetch} = useQuery(FEED_QUERY);
@@ -63,7 +62,13 @@ const Home = () => {
                 <RefreshControl refreshing={refreshing} onRefresh={refresh}/>
             }
         >
-            {loading ? <Loader/> : <Text>Hello</Text>}
+            {loading ?
+                <Loader/>
+                :
+                (data &&
+                 data.seeFeed &&
+                 data.seeFeed.map(post => <Post key={post.id} {...post}/>)
+                )}
         </ScrollView>
     );
 };
