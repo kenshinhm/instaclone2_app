@@ -2,7 +2,6 @@ import React from "react";
 import {View} from "react-native";
 import {createBottomTabNavigator} from "react-navigation";
 import Home from "../screens/tabs/home.js";
-import Search from "../screens/tabs/search.js";
 import Notifications from "../screens/tabs/notifications.js";
 import Profile from "../screens/tabs/profile.js";
 import {createStackNavigator} from "react-navigation";
@@ -10,6 +9,8 @@ import MessageLink from "../components/messageLink.js";
 import NavIcon from "../components/navIcon.js";
 import {Platform} from "react-native";
 import {stackStyles} from "./config.js";
+import Search from "../screens/tabs/search/searchContainer.js";
+import Detail from "../screens/photo/detail.js";
 
 const stackFactory = (initialRoute, customConfig) =>
     createStackNavigator({
@@ -20,6 +21,7 @@ const stackFactory = (initialRoute, customConfig) =>
                 headerStyle: {...stackStyles}
             }
         },
+        Detail,
     }, {
         headerLayoutPreset: "center"
     });
