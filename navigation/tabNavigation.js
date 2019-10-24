@@ -11,6 +11,7 @@ import {Platform} from "react-native";
 import {stackStyles} from "./config.js";
 import Search from "../screens/tabs/search/searchContainer.js";
 import Detail from "../screens/photo/detail.js";
+import Styles from "../shared/styles.js";
 
 const stackFactory = (initialRoute, customConfig) =>
     createStackNavigator({
@@ -18,12 +19,20 @@ const stackFactory = (initialRoute, customConfig) =>
             screen: initialRoute,
             navigationOptions: {
                 ...customConfig,
-                headerStyle: {...stackStyles}
             }
         },
-        Detail,
+        Detail: {
+            screen: Detail,
+            navigationOptions: {
+                headerTintColor: Styles.blackColor,
+                title: "Photo"
+            }
+        },
     }, {
-        headerLayoutPreset: "center"
+        defaultNavigationOptions: {
+            headerStyle: {...stackStyles}
+        },
+        headerLayoutPreset: "center",
     });
 
 const TabNavigation = createBottomTabNavigator(
@@ -43,7 +52,9 @@ const TabNavigation = createBottomTabNavigator(
             }
         },
         Search: {
-            screen: stackFactory(Search),
+            screen: stackFactory(Search, {
+                headerBackTitle: null
+            }),
             navigationOptions: {
                 tabBarIcon: ({focused}) => (
                     <NavIcon
