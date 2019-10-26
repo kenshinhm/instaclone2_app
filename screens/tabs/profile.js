@@ -1,18 +1,32 @@
 import React from "react";
-import styled from "styled-components";
+import {gql} from "apollo-boost";
+import {USER_FRAGMENT} from "../../shared/fragments.js";
+import {useQuery} from "react-apollo-hooks";
+import {ScrollView} from "react-native";
+import Loader from "../../components/loader.js";
+import UserProfile from "../../components/userProfile.js";
 
-const View = styled.View`
-    flex: 1;
-    justify-content: center;
-    align-items: center;
+
+export const ME = gql`
+    {
+        me {
+            ...UserParts
+        }
+    }
+    ${USER_FRAGMENT}
 `;
 
-const Text = styled.Text``;
-
-const Profile = () => (
-    <View>
-        <Text>Profile</Text>
-    </View>
-);
+const Profile = ({navigation}) => {
+    const {loading, data} = useQuery(ME);
+    return (
+        <ScrollView>
+            {loading ?
+                <Loader/>
+                :
+                data && data.me && <UserProfile {...data.me}/>
+            }
+        </ScrollView>
+    );
+};
 
 export default Profile;
