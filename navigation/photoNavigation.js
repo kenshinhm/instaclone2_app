@@ -3,20 +3,50 @@ import SelectPhoto from "../screens/photo/selectPhoto.js";
 import TakePhoto from "../screens/photo/takePhoto.js";
 import UploadPhoto from "../screens/photo/uploadPhoto.js";
 import {stackStyles} from "./config.js";
+import Styles from "../shared/styles.js";
 
 const PhotoTabs = createMaterialTopTabNavigator(
     {
-        SelectPhoto,
-        TakePhoto
+        Select: {
+            screen: SelectPhoto,
+            navigationOptions: {
+                tabBarLabel: "Select"
+            }
+        },
+        Take: {
+            screen: TakePhoto,
+            navigationOptions: {
+                tabBarLabel: "Take"
+            }
+        }
     },
     {
-        tabBarPosition: "bottom"
+        tabBarPosition: "bottom",
+        tabBarOptions: {
+            indicatorStyle: {
+                backgroundColor: "white",
+                // marginBottom: 20
+            },
+            labelStyle: {
+                color: "white",
+                fontWeight: "600"
+            },
+            style: {
+                // paddingBottom: 20,
+                backgroundColor: Styles.darkGreyColor,
+            }
+        }
     }
 );
 
 const PhotoNavigation = createStackNavigator(
     {
-        PhotoTabs,
+        Tabs: {
+            screen: PhotoTabs,
+            navigationOptions: {
+                header: null
+            }
+        },
         UploadPhoto
     },
     {
