@@ -8,6 +8,7 @@ import Constant from "../shared/constants.js";
 import {gql} from "apollo-boost";
 import {useMutation} from "react-apollo-hooks";
 import Styles from "../shared/styles.js";
+import {withNavigation} from "react-navigation";
 
 export const TOGGLE_LIKE = gql`
     mutation toggelLike($postId: String!) {
@@ -62,7 +63,7 @@ const CommentCount = styled.Text`
     font-size: 13px;
 `;
 
-const Post = ({
+const _Post = ({
     id,
     user,
     location,
@@ -70,7 +71,8 @@ const Post = ({
     likeCount: likeCountProp,
     caption,
     comments = [],
-    isLiked: isLikedProp
+    isLiked: isLikedProp,
+    navigation
 }) => {
     const [isLiked, setIsLiked] = useState(isLikedProp);
     const [likeCount, setLikeCount] = useState(likeCountProp);
@@ -95,12 +97,12 @@ const Post = ({
     return (
         <Container>
             <Header>
-                <Touchable>
+                <Touchable onPress={() => navigation.navigate("UserDetail", {username: user.username})}>
                     <Image style={{height: 40, width: 40, borderRadius: 20}}
                            source={{uri: user.avatar}}
                     />
                 </Touchable>
-                <Touchable>
+                <Touchable onPress={() => navigation.navigate("UserDetail", {username: user.username})}>
                     <HeaderUserContainer>
                         <Bold>{user.username}</Bold>
                         <Location>{location}</Location>
@@ -165,7 +167,7 @@ const Post = ({
     );
 };
 
-Post.propTypes = {
+_Post.propTypes = {
     id: PropTypes.string.isRequired,
     user: PropTypes.shape({
         id: PropTypes.string.isRequired,
@@ -194,5 +196,7 @@ Post.propTypes = {
     location: PropTypes.string,
     createdAt: PropTypes.string.isRequired
 };
+
+const Post = withNavigation(_Post);
 
 export default Post;

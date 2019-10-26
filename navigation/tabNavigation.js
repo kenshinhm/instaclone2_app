@@ -12,6 +12,7 @@ import {stackStyles} from "./config.js";
 import Search from "../screens/tabs/search/searchContainer.js";
 import Detail from "../screens/photo/detail.js";
 import Styles from "../shared/styles.js";
+import UserDetail from "../screens/user/userDetail.js";
 
 const stackFactory = (initialRoute, customConfig) =>
     createStackNavigator({
@@ -24,12 +25,19 @@ const stackFactory = (initialRoute, customConfig) =>
         Detail: {
             screen: Detail,
             navigationOptions: {
-                headerTintColor: Styles.blackColor,
                 title: "Photo"
             }
         },
+        UserDetail: {
+            screen: UserDetail,
+            navigationOptions: {
+                title: "User"
+            }
+        }
     }, {
         defaultNavigationOptions: {
+            headerBackTitle: null,
+            headerTintColor: Styles.blackColor,
             headerStyle: {...stackStyles}
         },
         headerLayoutPreset: "center",
