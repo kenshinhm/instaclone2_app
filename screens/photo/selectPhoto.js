@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import styled from "styled-components";
 import * as MediaLibrary from "expo-media-library";
 import * as Permissions from "expo-permissions";
-import {Image, ScrollView} from "react-native";
+import {Image, ScrollView, TouchableOpacity} from "react-native";
 import Loader from "../../components/loader.js";
 import Constant from "../../shared/constants.js";
 
@@ -10,13 +10,15 @@ const View = styled.View`
     flex: 1;
 `;
 
-const Text = styled.Text``;
-
 const SelectPhoto = () => {
     const [loading, setLoading] = useState(true);
     const [hasPermission, setHasPermission] = useState(false);
     const [selected, setSelected] = useState();
     const [allPhotos, setAllPhotos] = useState();
+
+    const changeSelected = photo => {
+        setSelected(photo);
+    };
 
     const getPhotos = async () => {
         try {
@@ -59,12 +61,16 @@ const SelectPhoto = () => {
                             />
                             <ScrollView contentContainerStyle={{flexDirection: "row"}}>
                                 {allPhotos.map(photo => (
-                                    <Image key={photo.id} source={{uri: photo.uri}}
-                                           style={{
-                                               width: Constant.width / 3,
-                                               height: Constant.height / 6
-                                           }}
-                                    />
+                                    <TouchableOpacity key={photo.id}
+                                                      onPress={() => changeSelected(photo)}>
+                                        <Image source={{uri: photo.uri}}
+                                               style={{
+                                                   width: Constant.width / 3,
+                                                   height: Constant.height / 6,
+                                                   opacity: photo.id === selected.id ? 0.5 : 1
+                                               }}
+                                        />
+                                    </TouchableOpacity>
                                 ))}
                             </ScrollView>
                         </>
