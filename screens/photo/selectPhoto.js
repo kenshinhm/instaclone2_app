@@ -5,12 +5,30 @@ import * as Permissions from "expo-permissions";
 import {Image, ScrollView, TouchableOpacity} from "react-native";
 import Loader from "../../components/loader.js";
 import Constant from "../../shared/constants.js";
+import Styles from "../../shared/styles.js";
 
 const View = styled.View`
     flex: 1;
 `;
 
-const SelectPhoto = () => {
+const Button = styled.TouchableOpacity`
+  width: 100px;
+  height: 30px;
+  position: absolute;
+  right: 5px;
+  top: 15px;
+  background-color: ${Styles.blueColor};
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+`;
+
+const Text = styled.Text`
+  color: white;
+  font-weight: 600;
+`;
+
+const SelectPhoto = ({navigation}) => {
     const [loading, setLoading] = useState(true);
     const [hasPermission, setHasPermission] = useState(false);
     const [selected, setSelected] = useState();
@@ -46,6 +64,10 @@ const SelectPhoto = () => {
         }
     };
 
+    const handleSelected = () => {
+        navigation.navigate("Upload", {photo: selected});
+    };
+
     useEffect(() => {
         askPermission().then(null);
     }, []);
@@ -59,7 +81,10 @@ const SelectPhoto = () => {
                             <Image style={{width: Constant.width, height: Constant.height / 2}}
                                    source={{uri: selected ? selected.uri : null}}
                             />
-                            <ScrollView contentContainerStyle={{flexDirection: "row"}}>
+                            <Button onPress={handleSelected}>
+                                <Text>Select Photo</Text>
+                            </Button>
+                            <ScrollView contentContainerStyle={{flexWrap: "wrap", flexDirection: "row"}}>
                                 {allPhotos.map(photo => (
                                     <TouchableOpacity key={photo.id}
                                                       onPress={() => changeSelected(photo)}>

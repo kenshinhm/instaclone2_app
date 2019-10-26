@@ -9,9 +9,9 @@ const View = styled.View`
 
 const Text = styled.Text``;
 
-const UploadPhoto = () => (
+const UploadPhoto = ({navigation}) => (
     <View>
-        <Text>Upload</Text>
+        <Text>I should upload {navigation.getParam("photo").uri}</Text>
     </View>
 );
 
