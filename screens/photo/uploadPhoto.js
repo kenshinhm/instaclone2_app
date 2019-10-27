@@ -5,6 +5,19 @@ import Styles from "../../shared/styles.js";
 import Constant from "../../shared/constants.js";
 import useInput from "../../hook/useInput.js";
 import axios from "axios";
+import {gql} from "apollo-boost";
+import {useMutation} from "react-apollo-hooks";
+import {FEED_QUERY} from "../tabs/home.js";
+
+const UPLOAD = gql`
+    mutation uploadPost($caption: String!, $files: [String!]!, $location: String) {
+        uploadPost(caption: $caption, files: $files, location: $location) {
+            id
+            caption
+            location
+        }
+    }
+`;
 
 const View = styled.View`
   flex: 1;
@@ -42,10 +55,14 @@ const Text = styled.Text`
 
 export default ({navigation}) => {
     const [loading, setIsLoading] = useState(false);
-    const [fileUrl, setFileUrl] = useState("");
     const photo = navigation.getParam("photo");
     const captionInput = useInput("");
     const locationInput = useInput("");
+
+    const uploadMutation = useMutation(UPLOAD, {
+        refetchQueries: () => [{query: FEED_QUERY}]
+    });
+
     const handleSubmit = async () => {
         if (captionInput.value === "" || locationInput.value === "") {
             Alert.alert("All fields are required");
@@ -60,15 +77,27 @@ export default ({navigation}) => {
             uri: photo.uri
         });
         try {
+            setIsLoading(true);
             const {data: {location}} = await axios.post("http://218.148.38.209:4000/api/upload", formData, {
                 headers: {
                     "content-type": "multipart/form-data"
                 }
             });
-            setFileUrl(location);
-            Alert.alert("successfully uploaded");
+
+            const {data: {uploadPost}} = await uploadMutation({
+                variables: {
+                    files: [location],
+                    caption: captionInput.value,
+                    location: locationInput.value
+                }
+            });
+            if (uploadPost.id) {
+                navigation.navigate("TabNavigation");
+            }
         } catch (e) {
             Alert.alert(e.toString());
+        } finally {
+            setIsLoading(false);
         }
     };
     return (

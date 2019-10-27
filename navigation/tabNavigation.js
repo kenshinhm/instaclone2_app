@@ -118,7 +118,7 @@ const TabNavigation = createBottomTabNavigator(
         }
     },
     {
-        initialRouteName: "Profile",
+        initialRouteName: "Home",
         tabBarOptions: {
             showLabel: false,
             style: {

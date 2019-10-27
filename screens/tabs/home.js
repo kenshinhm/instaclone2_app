@@ -13,7 +13,7 @@ const View = styled.View`
     flex: 1;
 `;
 
-const FEED_QUERY = gql`
+export const FEED_QUERY = gql`
     {
         seeFeed {
             ...PostParts
