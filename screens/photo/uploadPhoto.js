@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Styles from "../../shared/styles.js";
 import Constant from "../../shared/constants.js";
 import useInput from "../../hook/useInput.js";
+import axios from "axios";
 
 const View = styled.View`
   flex: 1;
@@ -42,18 +43,39 @@ const Text = styled.Text`
 export default ({navigation}) => {
     const [loading, setIsLoading] = useState(false);
     const [fileUrl, setFileUrl] = useState("");
+    const photo = navigation.getParam("photo");
     const captionInput = useInput("");
     const locationInput = useInput("");
     const handleSubmit = async () => {
         if (captionInput.value === "" || locationInput.value === "") {
             Alert.alert("All fields are required");
         }
+        const formData = new FormData();
+        const name = photo.filename;
+        // const [, type] = name.split(".");
+        const type = 'image/jpeg';
+        formData.append("file", {
+            name,
+            type: type.toLowerCase(),
+            uri: photo.uri
+        });
+        try {
+            const {data: {path}} = await axios.post("http://218.148.38.209:4000/api/upload", formData, {
+                headers: {
+                    "content-type": "multipart/form-data"
+                }
+            });
+            setFileUrl(path);
+            Alert.alert("successfully uploaded");
+        } catch (e) {
+            Alert.alert(e.toString());
+        }
     };
     return (
         <View>
             <Container>
                 <Image
-                    source={{uri: navigation.getParam("photo").uri}}
+                    source={{uri: photo.uri}}
                     style={{height: 80, width: 80, marginRight: 30}}
                 />
                 <Form>
