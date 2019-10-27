@@ -60,12 +60,12 @@ export default ({navigation}) => {
             uri: photo.uri
         });
         try {
-            const {data: {path}} = await axios.post("http://218.148.38.209:4000/api/upload", formData, {
+            const {data: {location}} = await axios.post("http://218.148.38.209:4000/api/upload", formData, {
                 headers: {
                     "content-type": "multipart/form-data"
                 }
             });
-            setFileUrl(path);
+            setFileUrl(location);
             Alert.alert("successfully uploaded");
         } catch (e) {
             Alert.alert(e.toString());
